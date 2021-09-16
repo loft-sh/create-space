@@ -98,8 +98,8 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const name = core.getInput('name', { required: true });
-            const postDeleteSpace = core.getBooleanInput('post-delete-space');
-            if (postDeleteSpace) {
+            const autoCleanupSpace = core.getBooleanInput('auto-cleanup');
+            if (autoCleanupSpace) {
                 const args = new args_builder_1.ArgsBuilder();
                 args.addSubcommand('delete');
                 args.addSubcommand('space');

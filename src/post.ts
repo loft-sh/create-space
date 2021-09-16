@@ -6,9 +6,9 @@ import {ArgsBuilder} from './args-builder'
 async function run(): Promise<void> {
   try {
     const name: string = core.getInput('name', {required: true})
-    const postDeleteSpace: boolean = core.getBooleanInput('post-delete-space')
+    const autoCleanupSpace: boolean = core.getBooleanInput('auto-cleanup')
 
-    if (postDeleteSpace) {
+    if (autoCleanupSpace) {
       const args: ArgsBuilder = new ArgsBuilder()
       args.addSubcommand('delete')
       args.addSubcommand('space')
