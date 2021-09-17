@@ -15,6 +15,13 @@ jobs:
           npm install
       - run: |
           npm run all
+  space_id:
+    runs-on: ubuntu-latest
+    steps:
+      - id: space_id
+        run: echo "::set-output name=id::$(uuidgen)"
+    outputs:
+      space_id: ${{ steps.space_id.outputs.id }}
   # test-error-without-loft:
   #   runs-on: ubuntu-latest
   #   steps:
@@ -24,7 +31,8 @@ jobs:
   #       with:
   #         name: create-myspace-${{ matrix.os }}
   #     - run: loft list spaces
-  test-automatic-delete:
+  test-auto-cleanup-default:
+    needs: [space_id]
     strategy:
       matrix:
         os:
@@ -39,9 +47,11 @@ jobs:
           access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - uses: ./
         with:
-          name: create-myspace-${{ matrix.os }}
+          name: create-${{ matrix.os }}-${{ needs.space_id.outputs.space_id }}
       - run: loft list spaces
-  test-manual-delete:
+      - run: loft delete space create-${{ matrix.os }}-${{ needs.space_id.outputs.space_id }}
+  test-auto-cleanup-false:
+    needs: [space_id]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -51,11 +61,12 @@ jobs:
           access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - uses: ./
         with:
-          name: create-myspace-manual-delete
+          name: auto-cleanup-false-${{ needs.space_id.outputs.space_id }}
           auto-cleanup: false
       - run: loft list spaces
-      - run: loft delete space create-myspace-manual-delete
-  test-delete-after:
+      - run: loft delete space auto-cleanup-false-${{ needs.space_id.outputs.space_id }}
+  test-auto-cleanup-true:
+    needs: [space_id]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -65,10 +76,26 @@ jobs:
           access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - uses: ./
         with:
-          name: create-myspace-delete-after
+          name: auto-cleanup-true-${{ needs.space_id.outputs.space_id }}
+          auto-cleanup: true
+      - run: loft list spaces
+  test-delete-after:
+    needs: [space_id]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: loft-sh/setup-loft@main
+        with:
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+      - uses: ./
+        with:
+          name: delete-after-${{ needs.space_id.outputs.space_id }}
           delete-after: 60
       - run: loft list spaces
+      - run: loft delete space delete-after-${{ needs.space_id.outputs.space_id }}
   test-sleep-after:
+    needs: [space_id]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -78,10 +105,12 @@ jobs:
           access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - uses: ./
         with:
-          name: create-myspace-sleep-after
+          name: sleep-after-${{ needs.space_id.outputs.space_id }}
           sleep-after: 60
       - run: loft list spaces
+      - run: loft delete space sleep-after-${{ needs.space_id.outputs.space_id }}
   test-disable-direct-cluster-endpoint:
+    needs: [space_id]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -91,6 +120,7 @@ jobs:
           access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - uses: ./
         with:
-          name: create-myspace-disable-direct-cluster-endpoint
+          name: disable-endpoint-${{ needs.space_id.outputs.space_id }}
           disable-direct-cluster-endpoint: true
       - run: loft list spaces
+      - run: loft delete space disable-endpoint-${{ needs.space_id.outputs.space_id }}
