@@ -15,6 +15,13 @@ jobs:
           npm install
       - run: |
           npm run all
+  space_id:
+    runs-on: ubuntu-latest
+    steps:
+      - id: space_id
+        run: echo "::set-output name=id::$(uuidgen)"
+    outputs:
+      space_id: ${{ steps.space_id.outputs.id }}
   # test-error-without-loft:
   #   runs-on: ubuntu-latest
   #   steps:
@@ -22,9 +29,10 @@ jobs:
   #     - uses: ./
   #       continue-on-error: true
   #       with:
-  #         name: myspace-${{ matrix.os }}
+  #         name: create-myspace-${{ matrix.os }}
   #     - run: loft list spaces
-  test-automatic-delete:
+  test-auto-cleanup-default:
+    needs: [space_id]
     strategy:
       matrix:
         os:
@@ -33,64 +41,86 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - uses: lizardruss/install-loft-cli@main
+      - uses: loft-sh/setup-loft@main
         with:
-          loft-url: ${{ secrets.LOFT_URL }}
-          loft-access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - uses: ./
         with:
-          name: myspace-${{ matrix.os }}
+          name: create-${{ matrix.os }}-${{ needs.space_id.outputs.space_id }}
       - run: loft list spaces
-  test-manual-delete:
+      - run: loft delete space create-${{ matrix.os }}-${{ needs.space_id.outputs.space_id }}
+  test-auto-cleanup-false:
+    needs: [space_id]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: lizardruss/install-loft-cli@main
+      - uses: loft-sh/setup-loft@main
         with:
-          loft-url: ${{ secrets.LOFT_URL }}
-          loft-access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - uses: ./
         with:
-          name: myspace-manual-delete
-          post-delete-space: false
+          name: auto-cleanup-false-${{ needs.space_id.outputs.space_id }}
+          auto-cleanup: false
       - run: loft list spaces
-      - run: loft delete space myspace-manual-delete
+      - run: loft delete space auto-cleanup-false-${{ needs.space_id.outputs.space_id }}
+  test-auto-cleanup-true:
+    needs: [space_id]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: loft-sh/setup-loft@main
+        with:
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+      - uses: ./
+        with:
+          name: auto-cleanup-true-${{ needs.space_id.outputs.space_id }}
+          auto-cleanup: true
+      - run: loft list spaces
   test-delete-after:
+    needs: [space_id]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: lizardruss/install-loft-cli@main
+      - uses: loft-sh/setup-loft@main
         with:
-          loft-url: ${{ secrets.LOFT_URL }}
-          loft-access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - uses: ./
         with:
-          name: myspace-delete-after
+          name: delete-after-${{ needs.space_id.outputs.space_id }}
           delete-after: 60
       - run: loft list spaces
+      - run: loft delete space delete-after-${{ needs.space_id.outputs.space_id }}
   test-sleep-after:
+    needs: [space_id]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: lizardruss/install-loft-cli@main
+      - uses: loft-sh/setup-loft@main
         with:
-          loft-url: ${{ secrets.LOFT_URL }}
-          loft-access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - uses: ./
         with:
-          name: myspace-sleep-after
+          name: sleep-after-${{ needs.space_id.outputs.space_id }}
           sleep-after: 60
       - run: loft list spaces
+      - run: loft delete space sleep-after-${{ needs.space_id.outputs.space_id }}
   test-disable-direct-cluster-endpoint:
+    needs: [space_id]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: lizardruss/install-loft-cli@main
+      - uses: loft-sh/setup-loft@main
         with:
-          loft-url: ${{ secrets.LOFT_URL }}
-          loft-access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - uses: ./
         with:
-          name: myspace-disable-direct-cluster-endpoint
+          name: disable-endpoint-${{ needs.space_id.outputs.space_id }}
           disable-direct-cluster-endpoint: true
       - run: loft list spaces
+      - run: loft delete space disable-endpoint-${{ needs.space_id.outputs.space_id }}

@@ -1,10 +1,10 @@
 <p align="center">
-  <a href="https://github.com/lizardruss/create-loft-space/actions"><img alt="create-loft-space status" src="https://github.com/lizardruss/create-loft-space/workflows/build-test/badge.svg"></a>
+  <a href="https://github.com/loft-sh/create-space/actions"><img alt="create-loft-space status" src="https://github.com/loft-sh/create-space/workflows/build-test/badge.svg"></a>
 </p>
 
-# Create Loft Space Action
+# create-space
 
-This is a GitHub Action to create a space in loft. It is intended to be used with the [Install Loft CLI GitHub Action](https://github.com/lizardruss/install-loft-cli) to first install the Loft CLI.
+This is a GitHub Action to create a space in loft. It is intended to be used with the [setup-loft GitHub Action](https://github.com/loft-sh/setup-loft) to first install the Loft CLI.
 
 ## Usage
 
@@ -22,12 +22,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Loft CLI
-        uses: lizardruss/install-loft-cli@main
+        uses: loft-sh/setup-loft@main
         with:
-          loft-url: ${{ secrets.LOFT_URL }}
-          loft-access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
       - name: Create staging Space
-        uses: lizardruss/create-loft-space@main
+        uses: loft-sh/create-space@main
         with:
           name: staging
 ```
@@ -46,4 +46,4 @@ The following inputs can be used as `step.with` keys
 | `delete-after`      | Number   | If set to non zero, will tell loft to delete the space after specified seconds of inactivity
 | `sleep-after`       | Number   | If set to non zero, will tell the space to sleep after specified seconds of inactivity
 | `disable-direct-cluster-endpoint`       | Boolean   | When enabled does not use an available direct cluster endpoint to connect to the space
-| `post-delete`       | Boolean   | Delete the Space after the job run. Defaults to true
+| `auto-cleanup`      | Boolean   | Delete the Space after the job run (default false)
