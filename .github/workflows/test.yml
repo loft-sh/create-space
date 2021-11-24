@@ -124,3 +124,25 @@ jobs:
           disable-direct-cluster-endpoint: true
       - run: loft list spaces
       - run: loft delete space disable-endpoint-${{ needs.space_id.outputs.space_id }}
+  test-template:
+    needs: [space_id]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: loft-sh/setup-loft@main
+        with:
+          url: ${{ secrets.LOFT_URL }}
+          access-key: ${{ secrets.LOFT_ACCESS_KEY }}
+      - uses: ./
+        with:
+          name: template-${{ needs.space_id.outputs.space_id }}
+          template: example-template
+          user: russellcentanni
+          parameters: |
+            apps:
+            - name: example-manifests
+              parameters:
+                password: ${{ needs.space_id.outputs.space_id }}
+                version: '8.0'
+      - run: loft list spaces
+      - run: loft delete space template-${{ needs.space_id.outputs.space_id }}
