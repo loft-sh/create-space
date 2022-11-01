@@ -51,7 +51,9 @@ jobs:
       - run: loft list spaces
       - run: loft delete space create-${{ matrix.os }}-${{ needs.space_id.outputs.space_id }}
   test-auto-cleanup-false:
-    needs: [space_id]
+    needs:
+      - space_id
+      - test-auto-cleanup-default
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -66,7 +68,9 @@ jobs:
       - run: loft list spaces
       - run: loft delete space auto-cleanup-false-${{ needs.space_id.outputs.space_id }}
   test-auto-cleanup-true:
-    needs: [space_id]
+    needs:
+      - space_id
+      - test-auto-cleanup-false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -80,7 +84,9 @@ jobs:
           auto-cleanup: true
       - run: loft list spaces
   test-delete-after:
-    needs: [space_id]
+    needs:
+      - space_id
+      - test-auto-cleanup-true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -95,7 +101,9 @@ jobs:
       - run: loft list spaces
       - run: loft delete space delete-after-${{ needs.space_id.outputs.space_id }}
   test-sleep-after:
-    needs: [space_id]
+    needs:
+      - space_id
+      - test-delete-after
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -110,7 +118,9 @@ jobs:
       - run: loft list spaces
       - run: loft delete space sleep-after-${{ needs.space_id.outputs.space_id }}
   test-disable-direct-cluster-endpoint:
-    needs: [space_id]
+    needs:
+      - space_id
+      - test-sleep-after
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -125,7 +135,9 @@ jobs:
       - run: loft list spaces
       - run: loft delete space disable-endpoint-${{ needs.space_id.outputs.space_id }}
   test-template:
-    needs: [space_id]
+    needs:
+      - space_id
+      - test-disable-direct-cluster-endpoint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
