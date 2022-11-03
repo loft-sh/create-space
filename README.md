@@ -43,6 +43,7 @@ The following inputs can be used as `step.with` keys
 | `name`              | String   | The name of the space to create
 | `account`           | String   | The cluster account to use
 | `cluster`           | String   | The cluster to use
+| `project`           | String   | The project to use (requires Loft 3.0 and above)
 | `delete-after`      | Number   | If set to non zero, will tell loft to delete the space after specified seconds of inactivity
 | `sleep-after`       | Number   | If set to non zero, will tell the space to sleep after specified seconds of inactivity
 | `disable-direct-cluster-endpoint`       | Boolean   | When enabled does not use an available direct cluster endpoint to connect to the space

@@ -11,6 +11,9 @@ inputs:
   cluster:
     required: false
     description: "The cluster to use"
+  project:
+    required: false
+    description: "The project to use"
   delete-after:
     required: false
     description: "If set to non zero, will tell loft to delete the space after specified seconds of inactivity"

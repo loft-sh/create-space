@@ -1,10 +1,10 @@
-name: 'build-test'
+name: build-test
 on:
   pull_request:
   push:
     branches:
       - main
-      - 'releases/*'
+      - "releases/*"
 
 jobs:
   build:
@@ -158,3 +158,17 @@ jobs:
                 version: '8.0'
       - run: loft list spaces
       - run: loft delete space template-${{ needs.space_id.outputs.space_id }}
+  # test-project-unsupported:
+  #   needs:
+  #     - space_id
+  #     - test-template
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: loft-sh/setup-loft@main
+  #       with:
+  #         version: 2.3.2
+  #     - uses: ./
+  #       with:
+  #         name: project-unsupported-${{ needs.space_id.outputs.space_id }}
+  #         project: foo
