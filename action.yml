@@ -39,6 +39,10 @@ inputs:
     required: false
     description: "Delete the Space after the job run. Defaults to true"
     default: "false"
+  use:
+    required: false
+    description: "If loft should use the space if its already there"
+    default: "false"
 runs:
   using: "node12"
   main: "dist/main/index.js"
