@@ -1,4 +1,4 @@
-<p align="center">
+<p style="text-align: center;">
   <a href="https://github.com/loft-sh/create-space/actions"><img alt="create-loft-space status" src="https://github.com/loft-sh/create-space/workflows/build-test/badge.svg"></a>
 </p>
 
@@ -38,13 +38,14 @@ jobs:
 
 The following inputs can be used as `step.with` keys
 
-| Name                | Type     | Description                        |
-|---------------------|----------|------------------------------------|
-| `name`              | String   | The name of the space to create
-| `account`           | String   | The cluster account to use
-| `cluster`           | String   | The cluster to use
-| `project`           | String   | The project to use (requires Loft 3.0 and above)
-| `delete-after`      | Number   | If set to non zero, will tell loft to delete the space after specified seconds of inactivity
-| `sleep-after`       | Number   | If set to non zero, will tell the space to sleep after specified seconds of inactivity
-| `disable-direct-cluster-endpoint`       | Boolean   | When enabled does not use an available direct cluster endpoint to connect to the space
-| `auto-cleanup`      | Boolean   | Delete the Space after the job run (default false)
+| Name                              | Type     | Description                                                                                  |
+|-----------------------------------|----------|----------------------------------------------------------------------------------------------|
+| `name`                            | String   | The name of the space to create                                                              |
+| `account`                         | String   | The cluster account to use                                                                   |
+| `cluster`                         | String   | The cluster to use                                                                           |
+| `project`                         | String   | The project to use (requires Loft 3.0 and above)                                             |
+| `delete-after`                    | Number   | If set to non zero, will tell loft to delete the space after specified seconds of inactivity |
+| `sleep-after`                     | Number   | If set to non zero, will tell the space to sleep after specified seconds of inactivity       |
+| `disable-direct-cluster-endpoint` | Boolean   | When enabled does not use an available direct cluster endpoint to connect to the space      |
+| `auto-cleanup`                    | Boolean   | Delete the Space after the job run (default false)                                          |
+| `use`                             | Boolean   | When enabled this will skip space creation if the space already exists (default false)      |
