@@ -26,12 +26,12 @@ inputs:
   team:
     required: false
     description: "The team to create the space for"
-  template:
-    required: false
-    description: "The space template to use to create the space"
   user:
     required: false
     description: "The user to create the space for"
+  template:
+    required: false
+    description: "The space template to use to create the space"
   parameters:
     required: false
     description: "Embedded YAML array of App Parameters. The contents of this input will be written to a file and passed to the Loft CLI"
