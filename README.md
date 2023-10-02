@@ -38,14 +38,18 @@ jobs:
 
 The following inputs can be used as `step.with` keys
 
-| Name                              | Type     | Description                                                                                  |
-|-----------------------------------|----------|----------------------------------------------------------------------------------------------|
-| `name`                            | String   | The name of the space to create                                                              |
-| `account`                         | String   | The cluster account to use                                                                   |
-| `cluster`                         | String   | The cluster to use                                                                           |
-| `project`                         | String   | The project to use (requires Loft 3.0 and above)                                             |
-| `delete-after`                    | Number   | If set to non zero, will tell loft to delete the space after specified seconds of inactivity |
-| `sleep-after`                     | Number   | If set to non zero, will tell the space to sleep after specified seconds of inactivity       |
-| `disable-direct-cluster-endpoint` | Boolean   | When enabled does not use an available direct cluster endpoint to connect to the space      |
-| `auto-cleanup`                    | Boolean   | Delete the Space after the job run (default false)                                          |
-| `use`                             | Boolean   | When enabled this will skip space creation if the space already exists (default false)      |
+| Name                              | Type    | Description                                                                                                             |
+|-----------------------------------|---------|-------------------------------------------------------------------------------------------------------------------------|
+| `name`                            | String  | The name of the space to create                                                                                         |
+| `account`                         | String  | The cluster account to use                                                                                              |
+| `cluster`                         | String  | The cluster to use                                                                                                      |
+| `project`                         | String  | The project to use (requires Loft 3.0 and above)                                                                        |
+| `delete-after`                    | Number  | If set to non zero, will tell loft to delete the space after specified seconds of inactivity                            |
+| `sleep-after`                     | Number  | If set to non zero, will tell the space to sleep after specified seconds of inactivity                                  |
+| `disable-direct-cluster-endpoint` | Boolean | When enabled does not use an available direct cluster endpoint to connect to the space                                  |
+| `team`                            | String  | The team to create the space for                                                                                        |
+| `user`                            | String  | The user to create the space for                                                                                        |
+| `template`                        | String  | The space template to use to create the space                                                                           |
+| `parameters`                      | String  | Embedded YAML array of App Parameters. The contents of this input will be written to a file and passed to the Loft CLI  |
+| `auto-cleanup`                    | Boolean | Delete the Space after the job run (default false)                                                                      |
+| `use`                             | Boolean | When enabled this will skip space creation if the space already exists (default false)                                  |
